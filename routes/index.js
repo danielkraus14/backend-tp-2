@@ -24,6 +24,9 @@ routes.post('/update', isAuth , usersController.updateUser);
 routes.get('/animes', animeController.getAnimes);
 routes.post('/animes', animeController.uploadAnime);
 routes.post('/animes/favorite', animeController.setFavorite);
+routes.post('/animes/delete', animeController.deleteAnime);
+routes.get('/animes/:animeId', animeController.getAnimeById);
+routes.put('/animes/:animeId', animeController.updateAnime);
 
 
 module.exports = routes;

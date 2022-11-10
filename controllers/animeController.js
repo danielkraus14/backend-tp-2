@@ -38,9 +38,45 @@ const setFavorite = async (req, res) => {
     }
 };
 
+const deleteAnime = async (req, res) => {
+    const {animeId} = req.body;
+    try{
+        const result = await animeService.deleteAnime(animeId);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
+
+const getAnimeById = async (req, res) => {
+    const {animeId} = req.query;
+    try{
+        const result = await animeService.getAnimeById(animeId);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
+
+const updateAnime = async (req, res) => {
+    const {animeId} = req.params;
+    const { title, description, image} = req.body;
+    try{
+        const result = await animeService.updateAnime(animeId, title, description, image);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
 
 module.exports = {
     getAnimes,
     uploadAnime,
-    setFavorite
-}
+    setFavorite,
+    deleteAnime,
+    getAnimeById,
+    updateAnime
+};

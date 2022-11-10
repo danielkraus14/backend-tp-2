@@ -35,11 +35,45 @@ const setFavorite = async (animeId, userId) => {
     }catch(error){
         throw error;
     }
-}
+};
+
+const deleteAnime = async (animeId) => {
+    let result;
+    try{
+        result = await Anime.findByIdAndDelete(animeId);
+        return result;
+    }catch(error){
+        throw error;
+    }
+};
+
+const getAnimeById = async (animeId) => {
+    let result;
+    try{
+        result = await Anime.findById(animeId);
+        return result;
+    }catch(error){
+        throw error;
+    }
+};
+
+const updateAnime = async (animeId, title, description, image) => {
+    let result;
+    try{
+        result = await Anime.findByIdAndUpdate(animeId, {title, description, image});
+        return result;
+    }catch(error){
+        throw error;
+    }
+};
+
 
         
 
 module.exports = {
     uploadAnime,
-    setFavorite
+    setFavorite,
+    deleteAnime,
+    getAnimeById,
+    updateAnime
 }
