@@ -22,7 +22,7 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    favorites: [
+    favoriteAnimes: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Anime'

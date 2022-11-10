@@ -22,7 +22,25 @@ const uploadAnime = async (req, res) => {
     }
 };
 
+const setFavorite = async (req, res) => {
+
+    console.log(req.body, req.query);
+    const {animeId} = req.query;
+    const {userId} = req.body;
+
+    console.log(animeId, userId);
+    try{
+        const result = await animeService.setFavorite(animeId, userId);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
+
+
 module.exports = {
     getAnimes,
-    uploadAnime
+    uploadAnime,
+    setFavorite
 }

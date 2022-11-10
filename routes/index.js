@@ -23,6 +23,7 @@ routes.post('/update', isAuth , usersController.updateUser);
 //Anime
 routes.get('/animes', animeController.getAnimes);
 routes.post('/animes', animeController.uploadAnime);
+routes.post('/animes/favorite', animeController.setFavorite);
 
 
 module.exports = routes;
