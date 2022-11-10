@@ -3,6 +3,7 @@ const {DateTime} = require('luxon');
 
 
 const createToken = (user) => {
+    console.log(user);
     const payload = {
         sub: user._id,
         iat: DateTime.now().toMillis(),

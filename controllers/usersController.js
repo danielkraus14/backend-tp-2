@@ -1,53 +1,47 @@
 const User = require('../models/user');
-const { authService } = require('../services');
+const { authService, userService } = require('../services');
+const { validationResult } = require('express-validator');
 
-const login = (req, res) => {
+const signInUser = async (req, res) => {
+    try{
+        const resulValidationReq = validationResult(req);
+        const isValidReq = resulValidationReq.isEmpty();
+        const {email, username, password} = req.body;
 
-    const {email, username, password} = req.body;
-
-    if(!email && !username){
-        return res.status(400).send({message:'Email or username is required'});
-    }
-    User.findOne({ email: email, username: username }, (error, user) => {
-        if(error){
-            return res.status(500).send({message: 'Error when trying to find user', error});
-        }
-        if(!user){
-            return res.status(404).send({message: 'User not found', error});
+        if(!isValidReq){
+            return res.status(400).send({message: 'Invalid request', error: resulValidationReq.array()});
         }
         
-        console.log(password, user.password);
-        if(!user.comparePassword(password)){
-            return res.status(401).send({message: 'Wrong username, email or password', error});
-        }else{
-            res.status(200).send({token: authService.createToken(user)}); 
-        }
+        const userRegistered =  await userService.signInUser(req.body).catch(error => {
+            return res.status(error.status).send({message: error.message});
     });
+    res.status(userRegistered.status).send({message: userRegistered.message, token: userRegistered.token});
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }   
+
 }
 
-const register = (req, res) => {
-    const {email, username, password} = req.body;
-    console.log(req.body);
+const signUpUser = async (req, res) => {
+    try{
+        const resulValidationReq = validationResult(req);
+        const isValidReq = resulValidationReq.isEmpty();
 
-    if(!email && !username){
-        return res.status(400).send({message:'Email or username is required'});
-    }
-    User.findOne({ email: email, username: username }, (error, user) => {
-        if(error){
-            return res.status(500).send({message: 'Something went wrong', error});
+        if(!isValidReq){
+            return res.status(400).send({message: 'Invalid request', error: resulValidationReq.array()});
         }
-        if(user){
-            return res.status(400).send({message: 'A user is already registred with that username/email', error});
-        }
-        
-        const newUser = new User({email, username, password});
-        newUser.save((error) => {
-            if(error){
-                return res.status(500).send({message: 'Something went wrong', error});
+    
+        const userRegistered =  await userService.signUpUser(req.body).catch(
+            error => {
+                return res.status(error.status).send({message: error.message});
             }
-            res.status(200).send({token: authService.createToken(newUser)}); 
-        });
-    });
+        )
+        res.status(userRegistered.status).send({message: userRegistered.message ,token: userRegistered.token});
+        }
+        catch(error){
+            res.status(500).send({message: 'Something went wrong', error});
+        }
 }
 
 const deleteUser = (req, res) => {
@@ -77,8 +71,8 @@ const updateUser = async (req, res) => {
 }
 
 module.exports = {
-    login, 
-    register,
+    signInUser, 
+    signUpUser,
     deleteUser,
     updateUser
 }

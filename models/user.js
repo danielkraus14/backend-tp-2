@@ -21,7 +21,13 @@ const UserSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    favorites: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Anime'
+        }
+    ],
 });
 
 UserSchema.pre("save", function(next) {
