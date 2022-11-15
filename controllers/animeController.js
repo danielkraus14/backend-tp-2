@@ -11,10 +11,32 @@ const getAnimes = async (req, res) => {
     }
 };
 
-const uploadAnime = async (req, res) => {
-    const {title, description, image} = req.body;
+const getAnimeById = async (req, res) => {
+    const {animeId} = req.query;
     try{
-        const result = await animeService.uploadAnime(title, description, image);
+        const result = await animeService.getAnimeById(animeId);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
+
+const getAnimeByCategory = async (req, res) => {
+    const {categoryId} = req.query;
+    try{
+        const result = await animeService.getAnimeByCategory(categoryId);
+        res.status(200).send(result);
+    }
+    catch(error){
+        res.status(500).send({message: 'Something went wrong', error});
+    }
+};
+
+const uploadAnime = async (req, res) => {
+    const {title, description, image, categories} = req.body;
+    try{
+        const result = await animeService.uploadAnime(title, description, image, categories);
         res.status(201).send(result);
     }
     catch(error){
@@ -24,11 +46,9 @@ const uploadAnime = async (req, res) => {
 
 const setFavorite = async (req, res) => {
 
-    console.log(req.body, req.query);
-    const {animeId} = req.query;
+    const {animeId} = req.params;
     const {userId} = req.body;
 
-    console.log(animeId, userId);
     try{
         const result = await animeService.setFavorite(animeId, userId);
         res.status(200).send(result);
@@ -39,20 +59,9 @@ const setFavorite = async (req, res) => {
 };
 
 const deleteAnime = async (req, res) => {
-    const {animeId} = req.body;
+    const {animeId} = req.params;
     try{
         const result = await animeService.deleteAnime(animeId);
-        res.status(200).send(result);
-    }
-    catch(error){
-        res.status(500).send({message: 'Something went wrong', error});
-    }
-};
-
-const getAnimeById = async (req, res) => {
-    const {animeId} = req.query;
-    try{
-        const result = await animeService.getAnimeById(animeId);
         res.status(200).send(result);
     }
     catch(error){
@@ -74,9 +83,10 @@ const updateAnime = async (req, res) => {
 
 module.exports = {
     getAnimes,
+    getAnimeById,
+    getAnimeByCategory,
     uploadAnime,
     setFavorite,
     deleteAnime,
-    getAnimeById,
     updateAnime
 };

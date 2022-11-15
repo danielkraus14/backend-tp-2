@@ -28,6 +28,10 @@ const UserSchema = new Schema({
             ref: 'Anime'
         }
     ],
+    role: {
+        type: Schema.Types.ObjectId,
+        ref: 'Role'
+    }
 });
 
 UserSchema.pre("save", function(next) {

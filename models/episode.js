@@ -11,8 +11,8 @@ const EpisodeSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
+    number: {
+        type: Number,
         required: true
     },
     date: {
@@ -24,14 +24,6 @@ const EpisodeSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Anime'
     },
-    video: {
-        type: String,
-        required: true
-    },
-    number: {
-        type: Number,
-        required: true
-    }
 });
 
 module.exports = mongoose.model('Episode', EpisodeSchema);

@@ -1,29 +1,26 @@
-const User = require('../models/user');
-const { authService, userService } = require('../services');
 const { validationResult } = require('express-validator');
+const { authService, userService } = require('../services');
 
-const signInUser = async (req, res) => {
+const signUpUser = async (req, res) => {
     try{
         const resulValidationReq = validationResult(req);
         const isValidReq = resulValidationReq.isEmpty();
-        const {email, username, password} = req.body;
-
+        
         if(!isValidReq){
             return res.status(400).send({message: 'Invalid request', error: resulValidationReq.array()});
         }
-        
-        const userRegistered =  await userService.signInUser(req.body).catch(error => {
-            return res.status(error.status).send({message: error.message});
-    });
-    res.status(userRegistered.status).send({message: userRegistered.message, token: userRegistered.token});
+
+        const { username, password, email, role } = req.body;
+        const result = await userService.signUpUser( email, username, password, role );
+        const token = authService.createToken(result);
+        res.status(201).send({user: result, token});
+    }catch(error){
+        res.status(400).send(error);
     }
-    catch(error){
-        res.status(500).send({message: 'Something went wrong', error});
-    }   
+};
 
-}
-
-const signUpUser = async (req, res) => {
+const signInUser = async (req, res) => {
+    let result;
     try{
         const resulValidationReq = validationResult(req);
         const isValidReq = resulValidationReq.isEmpty();
@@ -32,47 +29,46 @@ const signUpUser = async (req, res) => {
             return res.status(400).send({message: 'Invalid request', error: resulValidationReq.array()});
         }
     
-        const userRegistered =  await userService.signUpUser(req.body).catch(
+        const { email, username, password} = req.body;
+        result =  await userService.signInUser(email, username, password).catch(
             error => {
                 return res.status(error.status).send({message: error.message});
             }
         )
-        res.status(userRegistered.status).send({message: userRegistered.message ,token: userRegistered.token});
-        }
-        catch(error){
-            res.status(500).send({message: 'Something went wrong', error});
-        }
-}
+        const token = authService.createToken(result);
+        res.status(201).send({user: result, token});
+    }catch(error){
+        res.status(400).send(error);
+    }
+};
 
-const deleteUser = (req, res) => {
-    const {id} = req.body;
-    User.findByIdAndDelete(id, (error, user) => {
-        if(error){
-            return res.status(500).send({message: 'Something went wrong', error});
-        }
-        if(!user){
-            return res.status(404).send({message: 'User not found', error});
-        }
-        res.status(200).send({message: 'User deleted successfully'});
-    });
+const deleteUser = async (req, res) => {
+    let result;
+    try{
+        const { userId } = req.params;
+        result = await userService.deleteUser(userId);
+        res.status(200).send({message: 'User deleted', user: result});
+    }catch(error){
+        res.status(400).send(error);
+    }
 };
 
 const updateUser = async (req, res) => {
-    const {_id} = req.body;
-    User.findByIdAndUpdate(_id, req.body, {new: true}, (error, user) => {
-        if(error){
-            return res.status(500).send({message: 'Something went wrong', error});
-        }
-        if(!user){
-            return res.status(404).send({message: 'User not found', error});
-        }
-        res.status(200).send({token: authService.createToken(user)});
-    });
+    let result;
+    try{
+        const { userId } = req.params;
+        const { username, password, email, role } = req.body;
+        result = await userService.updateUser(userId, username, password, email, role);
+        res.status(200).send({message: 'User updated', user: result});
+    }catch(error){
+        res.status(400).send(error);
+    }
 }
 
+
 module.exports = {
-    signInUser, 
     signUpUser,
+    signInUser,
     deleteUser,
     updateUser
 }

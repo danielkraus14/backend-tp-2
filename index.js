@@ -3,11 +3,15 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const routes = require('./routes');
 
+// Initial Setup
+const { createRoles } = require('./libs/initialSetup');
+
 // Load env vars
 dotenv.config();
 
 // Innitialize express
 const app = express();
+createRoles();
 
 // Middlewares to handle data
 app.use(express.urlencoded({ extended: true }));
