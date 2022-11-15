@@ -60,6 +60,21 @@ const signInUser = async (email, username, password) => {
     return result;
 }
 
+const getUserById = async (userId) => {
+    let result;
+    try{
+        const userFound = await User.findById(userId).populate('role');
+        if(!userFound){
+            result = {error: 'User not found'};
+            return result;
+        }
+        result = userFound;
+    }catch(error){
+        throw error;
+    }
+    return result;
+}
+
 const deleteUser = async (userId) => {
     let result;
     try{
@@ -99,6 +114,7 @@ const updateUser = async (userId, email, username, password, role) => {
 module.exports = {
     signUpUser,
     signInUser,
+    getUserById,
     deleteUser,
     updateUser
 }

@@ -42,6 +42,16 @@ const signInUser = async (req, res) => {
     }
 };
 
+const getUserById = async (req, res) => {
+    try{
+        const { userId } = req.params;
+        const result = await userService.getUserById(userId);
+        res.status(200).send(result);
+    }catch(error){
+        res.status(error.status).send({message: error.message});
+    }
+};
+
 const deleteUser = async (req, res) => {
     let result;
     try{
@@ -69,6 +79,7 @@ const updateUser = async (req, res) => {
 module.exports = {
     signUpUser,
     signInUser,
+    getUserById,
     deleteUser,
     updateUser
 }

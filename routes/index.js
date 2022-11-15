@@ -21,6 +21,7 @@ const { userSchema } = require('../controllers/schemas');
 // Routes
 
 // Users
+routes.get('/user/:userId', isAuth, usersController.getUserById);
 routes.post('/signup', userSchema, usersController.signUpUser);
 routes.post('/signin', userSchema, usersController.signInUser);
 routes.put('/update/:userId', isAuth , usersController.updateUser);
