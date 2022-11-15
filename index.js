@@ -22,7 +22,7 @@ app.use('/api', routes);
 
 //Connect to Server
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (error) => {
+mongoose.connect(process.env.MONGO_URI || "0.0.0.0", { useNewUrlParser: true, useUnifiedTopology: true }, (error) => {
     console.log(process.env.MONGO_URI);
     if(error){
         console.log(error);
