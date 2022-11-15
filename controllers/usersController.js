@@ -3,13 +3,13 @@ const { authService, userService } = require('../services');
 
 const signUpUser = async (req, res) => {
     try{
+        console.log(req.body);
         const resulValidationReq = validationResult(req);
         const isValidReq = resulValidationReq.isEmpty();
         
         if(!isValidReq){
             return res.status(400).send({message: 'Invalid request', error: resulValidationReq.array()});
         }
-
         const { username, password, email, role } = req.body;
         const result = await userService.signUpUser( email, username, password, role );
         const token = authService.createToken(result);
