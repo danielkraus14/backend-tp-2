@@ -16,7 +16,7 @@
   "description": "Backend tp 2",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config index.js",
+    "start": "node -r dotenv/config index.js",
     "dev": "nodemon index.js -r dotenv/config dotenv_config_path=./env-development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
