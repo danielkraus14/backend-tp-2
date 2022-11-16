@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const routes = require('./routes');
+const cors = require('cors');
 
 // Initial Setup
 const { createRoles } = require('./libs/initialSetup');
@@ -20,8 +21,12 @@ app.use(express.json());
 // Import routes
 app.use('/api', routes);
 
-//Connect to Server
+// Cors
+app.use(cors(),{
+    origin: '*' // Allow from all origins
+});
 
+//Connect to Server
 mongoose.connect(process.env.MONGO_URI || "0.0.0.0", { useNewUrlParser: true, useUnifiedTopology: true }, (error) => {
     console.log(process.env.MONGO_URI);
     if(error){
