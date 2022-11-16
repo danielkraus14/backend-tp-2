@@ -22,12 +22,7 @@ app.use(express.json());
 app.use('/api', routes);
 
 // Cors
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-    
-}));
+app.use(cors());
 
 //Connect to Server
 mongoose.connect(process.env.MONGO_URI || "0.0.0.0", { useNewUrlParser: true, useUnifiedTopology: true }, (error) => {
