@@ -12,7 +12,7 @@ const getAnimes = async (req, res) => {
 };
 
 const getAnimeById = async (req, res) => {
-    const {animeId} = req.query;
+    const {animeId} = req.params;
     try{
         const result = await animeService.getAnimeById(animeId);
         res.status(200).send(result);
@@ -23,7 +23,7 @@ const getAnimeById = async (req, res) => {
 };
 
 const getAnimeByCategory = async (req, res) => {
-    const {categoryId} = req.query;
+    const {categoryId} = req.params;
     try{
         const result = await animeService.getAnimeByCategory(categoryId);
         res.status(200).send(result);

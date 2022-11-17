@@ -36,7 +36,7 @@ const signInUser = async (req, res) => {
             }
         )
         const token = authService.createToken(result);
-        res.status(201).send({user: result, token});
+        res.status(200).send({user: result, token});
     }catch(error){
         res.status(400).send(error);
     }

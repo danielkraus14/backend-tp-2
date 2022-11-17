@@ -34,7 +34,11 @@ const uploadAnime = async (title, description, image, categories) => {
 const getAnimeById = async (animeId) => {
     let result;
     try{
-        result = await Anime.findById(animeId);
+        const animeFound = await Anime.findById(animeId);
+        if(!animeFound){
+            throw new Error('Anime not found');
+        }
+        result = animeFound;
         return result;
     }catch(error){
         throw error;
@@ -44,9 +48,13 @@ const getAnimeById = async (animeId) => {
 const getAnimeByCategory = async (categoryId) => {
     let result;
     try{
-        result = await Anime.find({
+        const animeFound = await Anime.find({
             category: categoryId
         });
+        if(!animeFound){
+            throw new Error('There is no anime in this category');
+        }
+        result = animeFound;
         return result;
     }catch(error){
         throw error;
@@ -81,7 +89,11 @@ const setFavorite = async (animeId, userId) => {
 const updateAnime = async (animeId, title, description, image) => {
     let result;
     try{
-        result = await Anime.findByIdAndUpdate(animeId, {title, description, image});
+        const candidateAnime = await Anime.findByIdAndUpdate(animeId, {title, description, image});
+        if(!candidateAnime){
+            throw new Error('Anime not found');
+        }
+        result = candidateAnime;
         return result;
     }catch(error){
         throw error;
