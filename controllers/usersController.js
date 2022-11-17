@@ -13,7 +13,7 @@ const signUpUser = async (req, res) => {
         const { username, password, email, role } = req.body;
         const result = await userService.signUpUser( email, username, password, role );
         const token = authService.createToken(result);
-        res.status(201).send({user: result, token});
+        res.status(201).send(token);
     }catch(error){
         res.status(400).send(error);
     }
@@ -36,7 +36,7 @@ const signInUser = async (req, res) => {
             }
         )
         const token = authService.createToken(result);
-        res.status(200).send({user: result, token});
+        res.status(200).send(token);
     }catch(error){
         res.status(400).send(error);
     }
