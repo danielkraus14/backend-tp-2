@@ -22,7 +22,11 @@ app.use(express.json());
 app.use('/api', routes);
 
 // Cors
-app.use(cors());
+const corstOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+}
+app.use(cors(corstOptions));
 
 //Connect to Server
 mongoose.connect(process.env.MONGO_URI || "0.0.0.0", { useNewUrlParser: true, useUnifiedTopology: true }, (error) => {
